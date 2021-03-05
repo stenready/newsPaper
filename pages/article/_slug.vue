@@ -50,7 +50,7 @@
             {{ post.description }}
           </div>
           <div class="col-lg-4 col-md-12 most_popular">
-            Самыме популярные статьи  этого автора
+            Самыме популярные статьи этого автора
             <div class="news_top_wrap">
               <OneNews
                 v-for="(news, idx) of topSourseNews.data"
@@ -72,8 +72,8 @@ import createResArticlesData from '@/utils/createResArticlesData.js'
 import localMoment from '@/utils/localMoment.js'
 export default {
   name: 'SinglePost',
+  components: { OneNews },
   async asyncData({ route, store, params, query, redirect, error }) {
-
     const title = route.params.slug.split('_').join(' ')
     let sourse, singlePost
     try {
@@ -98,7 +98,6 @@ export default {
     }
     return { post: singlePost.articles[0], sourse, topSourseNews }
   },
-  components: { OneNews },
   computed: {
     getPublishedDate() {
       return localMoment('DD.MM.YYYY.hh.mm', this.post.publishedAt)
@@ -109,7 +108,7 @@ export default {
 
 <style lang="scss" scoped>
 .single_post {
-  .most_popular{
+  .most_popular {
     margin-top: 1rem;
   }
   h1 {

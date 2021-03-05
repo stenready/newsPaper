@@ -7,12 +7,18 @@
           <label for="search">Строка поиска</label>
           <div class="search_wrap">
             <input
-              type="text"
-              class="form-control"
               id="search"
               v-model="inputSearch"
+              type="text"
+              class="form-control"
             />
-            <button ref="search-button" @click="searchHandler" class="btn btn-outline-success">Search</button>
+            <button
+              ref="search-button"
+              class="btn btn-outline-success"
+              @click="searchHandler"
+            >
+              Search
+            </button>
           </div>
         </div>
       </div>
@@ -20,16 +26,16 @@
       <div class="news_wrap">
         <div class="left_source content_item bg-info">
           <div
-            class="form-check"
             v-for="(el, idx) of sourses.sources"
             :key="idx"
+            class="form-check"
           >
             <input
+              :id="`checkbox-${idx}`"
               v-model="chakedCategories"
               class="form-check-input"
               type="checkbox"
               :value="el.id"
-              :id="`checkbox-${idx}`"
             />
             <label class="form-check-label" :for="`checkbox-${idx}`">
               {{ el.id }}
@@ -38,9 +44,9 @@
         </div>
         <div class="news_data content_item">
           <div
-            class="item_news"
             v-for="(article, idx) of articles.data"
             :key="idx"
+            class="item_news"
           >
             <OneNews :article="article" />
           </div>
@@ -49,27 +55,27 @@
         <div class="news_filters content_item bg-danger">
           <div class="container_by_filters">
             <Dropdown
-              @changeSelectDropdown="selectDropdownContry"
               :data="contries"
+              @changeSelectDropdown="selectDropdownContry"
             />
             <Dropdown
-              @changeSelectDropdown="selectDropdownSort"
               :data="sortData"
+              @changeSelectDropdown="selectDropdownSort"
             />
             <Dropdown
-              @changeSelectDropdown="selectDropdownPage"
               :data="pageDataArray"
+              @changeSelectDropdown="selectDropdownPage"
             />
           </div>
         </div>
       </div>
       <Paginate
         v-if="Math.ceil(articles.totalResults / pageNum) > 1"
+        v-model="page"
         :container-class="'pagination-wrap'"
         :page-class="'pagination-item'"
-        v-model="page"
         :page-range="6"
-        :clickHandler="changePage"
+        :click-handler="changePage"
         :next-text="''"
         :prev-text="''"
         :page-count="Math.ceil(articles.totalResults / pageNum)"
@@ -91,6 +97,7 @@ import Dropdown from '@/components/Dropdown'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 export default {
   name: 'MainPage',
+  components: { OneNews, Dropdown, Paginate, NavBar },
   async asyncData({ route, store, params, query, redirect, error }) {
     const page = route.query.page || 1
     let artclsResponse, responseSourses
@@ -98,12 +105,11 @@ export default {
       artclsResponse = await API.everythingNews(page)
       responseSourses = await API.getSourse()
     } catch (e) {
-      console.log(e)
       error('Ошибка ответа от сервера. Попробуйте позже!' + e)
     }
-    let articles = createResArticlesData(artclsResponse)
-    let pageDataArray = ['5', '10', '20', '50', '100']
-    let sortData = ['popularity', 'publishedAt', 'relevancy']
+    const articles = createResArticlesData(artclsResponse)
+    const pageDataArray = ['5', '10', '20', '50', '100']
+    const sortData = ['popularity', 'publishedAt', 'relevancy']
     return {
       articles,
       contries: contriesData,
@@ -112,12 +118,11 @@ export default {
       sourses: responseSourses,
     }
   },
-  components: { OneNews, Dropdown, Paginate, NavBar },
   data() {
     return {
       contry: '',
       inputSearch: '',
-      categories: categories,
+      categories,
       chakedCategories: [],
       page: +this.$route.query.page || 1,
       sort: '',
@@ -159,6 +164,7 @@ export default {
       this.articles = resArticle
     },
   },
+  mounted() {},
   methods: {
     async searchHandler() {
       if (!this.inputSearch) return false
@@ -168,12 +174,9 @@ export default {
         const search = `&q=${this.inputSearch}${this.getSortData}`
         const searchData = await API.getNewsBySourse(search)
         this.articles = createResArticlesData(searchData)
-         button.disabled = false
-         this.inputSearch = ''
-      } catch (e) {
-        
-      }
-      console.log(this.getSortData)
+        button.disabled = false
+        this.inputSearch = ''
+      } catch (e) {}
     },
     changePage(page) {
       this.page = page
@@ -194,13 +197,12 @@ export default {
       this.changeSortable = new Date()
     },
   },
-  mounted() {},
 }
 </script>
 
 <style lang="scss">
 .main_page {
-  .search_wrap{
+  .search_wrap {
     display: flex;
   }
   .left_source {

@@ -1,10 +1,10 @@
 <template>
-  <div class="dropdown"  :class="{ show: showDropdown }">
+  <div class="dropdown" :class="{ show: showDropdown }">
     <button
-      @click="showOrHideDropdown"
+      id="dropdownMenuButton"
       class="btn btn-secondary dropdown-toggle"
       type="button"
-      id="dropdownMenuButton"
+      @click="showOrHideDropdown"
     >
       {{ data[activeIndexLocal] }}
     </button>
@@ -14,11 +14,11 @@
       aria-labelledby="dropdownMenuButton"
     >
       <div
-        class="dropdown-item"
         v-for="(el, idx) of data"
-        @click="selectElement(idx)"
-        :class="activeIndexLocal === idx ? 'active' : ''"
         :key="idx"
+        class="dropdown-item"
+        :class="activeIndexLocal === idx ? 'active' : ''"
+        @click="selectElement(idx)"
       >
         {{ el }}
       </div>
@@ -45,6 +45,14 @@ export default {
       activeIndexLocal: this.activIndex,
     }
   },
+  mounted() {
+    setTimeout(() => {
+      document.body.addEventListener('click', this.clickOnOverlay)
+    }, 0)
+  },
+  beforeDestroy() {
+    document.body.removeEventListener('click', this.clickOnOverlay)
+  },
   methods: {
     showOrHideDropdown(e) {
       document.querySelectorAll('.dropdown').forEach((el) => {
@@ -69,18 +77,7 @@ export default {
       this.$emit('changeSelectDropdown', idx)
     },
   },
-  mounted() {
-    setTimeout(() => {
-      document.body.addEventListener('click', this.clickOnOverlay)
-    }, 0)
-  },
-  beforeDestroy() {
-    document.body.removeEventListener('click', this.clickOnOverlay)
-  },
 }
 </script>
 
-<style lang="scss">
-.dropdown {
-}
-</style>
+<style lang="scss"></style>

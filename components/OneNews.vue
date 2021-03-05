@@ -1,6 +1,11 @@
 <template>
   <div class="one_news">
-    <nuxt-link :to="`/article/${article.slug}?sourse=${article.source.id || article.source.name}&publishedAt=${article.publishedAt}`" :title="article.title">
+    <nuxt-link
+      :to="`/article/${article.slug}?sourse=${
+        article.source.id || article.source.name
+      }&publishedAt=${article.publishedAt}`"
+      :title="article.title"
+    >
       <div class="card">
         <img
           :src="article.urlToImage"
@@ -9,7 +14,9 @@
         />
         <div class="card-body">
           <h5 class="card-title">{{ article.title }}</h5>
-          <p class="card-text">{{ article.description && article.description.slice(0, 150) }}...</p>
+          <p class="card-text">
+            {{ article.description && article.description.slice(0, 150) }}...
+          </p>
           <button class="btn btn-primary">show full</button>
         </div>
       </div>
@@ -31,11 +38,11 @@ export default {
 
 <style lang="scss">
 .one_news {
-  .card-text{
+  .card-text {
     color: black;
   }
   height: 100%;
-  a{
+  a {
     text-decoration: none;
   }
 }
